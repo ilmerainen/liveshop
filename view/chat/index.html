@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script type="module" src="main.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="./assets/fontawesome-free-6.4.0-web/css/all.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Live chat</title>
+  </head>
+  <body>
+    <div class="website-layout">
+      <div class="chat-container">
+        <div class="popup">
+          <div class="chat popup__item">
+            <div class="chat__messages__container" id="chatMessagesContainer">
+              <div class="chat__messages__end" id="chatMessagesEnd"></div>
+              <div class="chat__messages" id="chatMessages">
+                <!--              <div class="chat-msg-container">-->
+                <!--                <div class="chat-msg__reply">-->
+                <!--                  <div class="reply-icon">-->
+                <!--                    <img src="assets/reply.svg" />-->
+                <!--                  </div>-->
+                <!--                  <div class="reply-content">-->
+                <!--                    <div class="reply-to-user">Jane Doe</div>-->
+                <!--                    <div class="reply-on-msg">-->
+                <!--                      Hi, what do you think about it?-->
+                <!--                    </div>-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--                <div class="chat-msg chat-msg_vendor" data-role="vendor">-->
+                <!--                  <div class="chat-msg__user">John</div>-->
+                <!--                  <div class="chat-msg__content">-->
+                <!--                    Retaining its fashion authority and the very best of its-->
+                <!--                    heritage, while celebrating iconic styles such as the Jamie-->
+                <!--                    and Joni jean, and embracing the new-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--              </div>-->
+              </div>
+            </div>
+            <div class="chat-msg__reply chat-msg__reply_cur hide" id="curReply">
+              <div class="reply-icon">
+                <img src="assets/reply.svg" />
+              </div>
+              <div class="reply-content">
+                <div class="reply-to-user">Jane Doe</div>
+                <div class="reply-on-msg">Hi, what do you think about it?</div>
+              </div>
+              <div class="reply-cancel" id="cancelReply">
+                <img src="assets/cancel.svg" />
+              </div>
+            </div>
+            <form class="chat__form" id="chatForm">
+              <input type="text" name="name" placeholder="Name" autofocus />
+              <input type="text" name="msg" placeholder="Say something" />
+              <select name="role" id="selectRole">
+                <option value="user" selected>User</option>
+                <option value="vendor">Vendor</option>
+              </select>
+              <input class="chat__form-btn" type="submit" value="Send" />
+            </form>
+          </div>
+          <div class="popup__live popup__item">
+            <video
+              src="./assets/mixkit-urban-trendy-womans-portrait-taking-off-a-sweatshirt-1300-medium.mp4"
+              autoplay
+              loop
+            ></video>
+          </div>
+          <div class="popup__products popup__item"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
