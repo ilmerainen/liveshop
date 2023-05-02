@@ -65,23 +65,5 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           envs: DATABASE_TYPE,DATABASE_HOST,DATABASE_PORT,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_SYNCHRONIZE,DATABASE_MAX_CONNECTIONS,DATABASE_SSL_ENABLED,DATABASE_REJECT_UNAUTHORIZED,NODE_ENV,APP_PORT,APP_NAME,API_PREFIX,APP_FALLBACK_LANGUAGE,APP_HEADER_LANGUAGE,FRONTEND_DOMAIN,BACKEND_DOMAIN
           script: |
-            export NODE_ENV=development \
-            && export APP_PORT=3001 \
-            && export APP_NAME="NestJS API" \
-            && export API_PREFIX=api \
-            && export APP_FALLBACK_LANGUAGE=en \
-            && export APP_HEADER_LANGUAGE=x-custom-lang \
-            && export FRONTEND_DOMAIN=http://localhost:3000 \
-            && export BACKEND_DOMAIN=http://0.0.0.0:3000 \
-            && export DATABASE_TYPE=postgres \
-            && export DATABASE_HOST=postgres \
-            && export DATABASE_PORT=5432 \
-            && export DATABASE_USERNAME=root \
-            && export DATABASE_PASSWORD=secret \
-            && export DATABASE_NAME=api \
-            && export DATABASE_SYNCHRONIZE=false \
-            && export DATABASE_MAX_CONNECTIONS=100 \
-            && export DATABASE_SSL_ENABLED=false \
-            && export DATABASE_REJECT_UNAUTHORIZED=false && \
             docker-compose -f /root/livechat/docker-compose.ci.yaml build --no-cache && \
             docker-compose -f /root/livechat/docker-compose.ci.yaml up -d
