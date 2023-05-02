@@ -321,7 +321,16 @@ document.getElementById('chatMessages').addEventListener('click', (e) => {
 });
 
 // add reply by double-click on message
-document.getElementById('chatMessages').addEventListener('dblclick', (e) => {
+const chatMessages = document.getElementById('chatMessages');
+chatMessages.addEventListener('dblclick', holdReply);
+chatMessages.addEventListener('touchend', holdReply);
+
+function holdReply(e) {
+  if (e.target.closest('.chat-msg__like')) {
+    e.stopPropagation();
+    return;
+  }
+
   const closestMsg = e.target.closest('.chat-msg');
 
   if (closestMsg) {
@@ -366,7 +375,7 @@ document.getElementById('chatMessages').addEventListener('dblclick', (e) => {
       deleteCurrentReply();
     });
   }
-});
+}
 
 // handle user blocking
 document.getElementById('chatMessages').addEventListener('click', (e) => {

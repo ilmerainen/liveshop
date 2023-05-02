@@ -49,7 +49,24 @@
                 <!--                </div>-->
                 <!--              </div>-->
               </div>
-              <div class="chat__form-stickers stickers-container hide" id="stickersContainer">
+            </div>
+            <div class="chat-msg__reply chat-msg__reply_cur hide" id="curReply">
+              <div class="reply-icon">
+                <img src="assets/reply.svg" />
+              </div>
+              <div class="reply-content">
+                <div class="reply-to-user">Jane Doe</div>
+                <div class="reply-on-msg">Hi, what do you think about it?</div>
+              </div>
+              <div class="reply-cancel" id="cancelReply">
+                <img src="assets/cancel.svg" />
+              </div>
+            </div>
+            <form class="chat__form" id="chatForm">
+              <div
+                class="chat__form-stickers stickers-container hide"
+                id="stickersContainer"
+              >
                 <img
                   class="sticker"
                   src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/001-peach.svg"
@@ -95,20 +112,6 @@
                   src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/010-tongue.svg"
                 />
               </div>
-            </div>
-            <div class="chat-msg__reply chat-msg__reply_cur hide" id="curReply">
-              <div class="reply-icon">
-                <img src="assets/reply.svg" />
-              </div>
-              <div class="reply-content">
-                <div class="reply-to-user">Jane Doe</div>
-                <div class="reply-on-msg">Hi, what do you think about it?</div>
-              </div>
-              <div class="reply-cancel" id="cancelReply">
-                <img src="assets/cancel.svg" />
-              </div>
-            </div>
-            <form class="chat__form" id="chatForm">
               <input type="text" name="name" placeholder="Name" autofocus />
               <input type="text" name="msg" placeholder="Say something" />
               <select name="role" id="selectRole">
@@ -148,6 +151,7 @@
           <div class="popup__live popup__item">
             <video src="./assets/video-medium.mp4" autoplay loop></video>
             <div class="chat__send_like">
+              <i class="far fa-light fa-heart"></i>
               <i class="far fa-light fa-heart"></i>
               <i class="far fa-light fa-heart"></i>
               <i class="far fa-light fa-heart"></i>

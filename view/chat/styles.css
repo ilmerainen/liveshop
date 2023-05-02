@@ -121,6 +121,8 @@ p {
 
 .chat__form {
   display: flex;
+  justify-content: center;
+  position: relative;
   width: 100%;
 }
 
@@ -299,8 +301,6 @@ p {
   animation-delay: 0.6s;
 }
 
-/* #endregion */
-
 @keyframes sendLike {
   0% {
     transform: translateY(0);
@@ -317,12 +317,14 @@ p {
 }
 
 .chat__send_like.animate i {
-  animation: sendLike 1s ease-out forwards;
+  animation: sendLike 1s ease-out;
   animation-play-state: running;
   color: #e01407;
   font-weight: 900;
   font-style: normal;
 }
+
+/* #endregion */
 
 .msg-like__counter {
   text-align: center;
@@ -348,13 +350,17 @@ p {
   width: 100%;
   padding: 1rem;
   margin: 0 auto;
-  height: 10rem;
+  height: 15rem;
+  border-radius: 10px;
   overflow: scroll;
-  position: sticky;
   bottom: 0;
-  background: white;
+  background: rgb(38 38 38 / 92%);
   box-shadow: 0 0 9px 2px rgb(0 0 0 / 18%);
   box-sizing: border-box;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  transform: translateY(-105%);
 }
 
 .stickers-container .sticker {
@@ -419,7 +425,7 @@ p {
   }
 
   .chat__form {
-    z-index: 1;
+    z-index: 2;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -501,8 +507,11 @@ p {
   }
 
   .stickers-container {
+    border-radius: 10px;
     height: 50vh;
+    width: 95%;
     flex-direction: unset;
+    background: rgb(19 19 19 / 80%);
   }
 
   .popup__live video {
@@ -516,5 +525,23 @@ p {
 
   .stickers-icon:active {
     color: #c0c0c0;
+  }
+
+  .chat-msg__reply {
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+  }
+
+  .chat-msg__reply_cur {
+    background: rgba(0, 0, 0, 0.8);
+    bottom: 3rem;
+    z-index: 2;
+    border-radius: 0;
+    padding-bottom: 1rem;
+  }
+
+  .reply-icon {
+    filter: invert(99%) sepia(2%) saturate(621%) hue-rotate(315deg) brightness(120%) contrast(100%);
   }
 }
