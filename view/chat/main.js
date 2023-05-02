@@ -1,6 +1,6 @@
 import { io } from 'https://cdn.socket.io/4.6.1/socket.io.esm.min.js';
 
-const socket = io('https://0121-45-12-24-243.eu.ngrok.io/chat');
+const socket = io('157.230.203.48:3001/chat');
 
 // todo: move to another file
 const chatId = new URL(document.location.href).searchParams.get('id');
@@ -19,7 +19,6 @@ await socket.emitWithAck('create_room', {
 });
 
 socket.on('receive_new_message', (data) => {
-  console.log('receive_new_message', data);
   const msg = JSON.parse(data);
   renderNewMessage({
     id: msg.id,
@@ -30,21 +29,29 @@ socket.on('receive_new_message', (data) => {
     reply: msg.reply?.content,
     replyTo: msg.reply?.username,
     currentRole: localStorage.getItem('role'),
+    likes: msg.likes,
+    type: msg.type,
   });
+  scrollToBottom('chatMessagesContainer');
 });
 
 function renderNewMessages(messages, toStart = false) {
   for (const msg of messages) {
-    renderNewMessage({
-      id: msg.id,
-      username: msg.user.name,
-      content: msg.content,
-      role: msg.user.role,
-      userId: msg.user.id,
-      reply: msg.reply?.content,
-      replyTo: msg.reply?.username,
-      currentRole: localStorage.getItem('role'),
-    }, toStart);
+    renderNewMessage(
+      {
+        id: msg.id,
+        username: msg.user.name,
+        content: msg.content,
+        role: msg.user.role,
+        userId: msg.user.id,
+        reply: msg.reply?.content,
+        replyTo: msg.reply?.username,
+        currentRole: localStorage.getItem('role'),
+        likes: msg.likes,
+        type: msg.type,
+      },
+      toStart,
+    );
   }
 }
 
@@ -58,6 +65,7 @@ function renderNewMessage(
     reply: null,
     replyTo: null,
     currentRole: null,
+    likes: null,
   },
   toStart = false,
 ) {
@@ -91,7 +99,12 @@ function renderNewMessage(
                 }" data-id="${data.id}">
                 <div class="chat-msg__user">${data.username}</div>
                 <div class="chat-msg__content">
-                  ${data.content}
+                  ${data.type === 'text' ? data.content : ''}
+                  ${
+                    data.type === 'sticker'
+                      ? `<img class="sticker" src="${data.content}">`
+                      : ''
+                  }
                 </div>
                 ${
                   data.role === 'user'
@@ -106,6 +119,14 @@ function renderNewMessage(
                 `
                     : ''
                 }
+                <div class="chat-msg__like ${
+                  data.likes.likedByMe ? 'active' : ''
+                }" data-liked-by-me="${data.likes.likedByMe}">
+                    <i class="far fa-light fa-heart"></i>
+                    <div class="msg-like__counter" data-count="${
+                      data.likes.count
+                    }">${data.likes.count}</div>
+              </div>
               </div>`;
   const messagesEl = document.getElementById('chatMessages');
   messagesEl[toStart ? 'prepend' : 'append'](msgEl);
@@ -136,6 +157,7 @@ async function fetchMessages(
     chatId,
     before: pagination.before || undefined,
     count: pagination.count,
+    userId: localStorage.getItem('chatUserId'),
   };
   const response = await socket.emitWithAck('request_all_messages', payload);
   return JSON.parse(response).data.messages;
@@ -149,8 +171,9 @@ async function fetchAndRenderMessages(
     count: GET_ALL_MESSAGES_LIMIT,
   },
 ) {
-  const messages = (await fetchMessages(chatId, pagination)).sort(
-      (a, b) => toStart ? b.id - a.id : a.id - b.id );
+  const messages = (await fetchMessages(chatId, pagination)).sort((a, b) =>
+    toStart ? b.id - a.id : a.id - b.id,
+  );
   renderNewMessages(messages, toStart);
 }
 
@@ -188,20 +211,34 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData(e.target);
   const content = formData.get('msg');
+  let role;
+  // todo: should be reworked
+  if (formData.get('role')) {
+    role = formData.get('role');
+  }
 
+  await sendMessage({
+    type: 'text',
+    role,
+    content,
+  });
+});
+
+async function sendMessage({ type, role, content } = {}) {
   if (!content) {
     console.error('error on msg submit');
     return;
   }
 
-  const curReply = document.getElementById('curReply');
-  const msgInput = form.querySelector('input[name="msg"]');
-  const userId = localStorage.getItem('chatUserId');
   const payload = {
     chatId,
     content,
-    role: 'user',
+    role: role || 'user',
+    type,
   };
+  const curReply = document.getElementById('curReply');
+  const msgInput = form.querySelector('input[name="msg"]');
+  const userId = localStorage.getItem('chatUserId');
   const userInput = form.querySelector('input[name="name"]');
   const username = userInput?.value;
 
@@ -219,11 +256,6 @@ form.addEventListener('submit', async (e) => {
     payload.replyTo = +curReply.dataset.replyToMsgId;
   }
 
-  // todo: should be removed on prod
-  if (formData.get('role')) {
-    payload.role = formData.get('role');
-  }
-
   const response = await socket.emitWithAck('send_message', payload);
   const parsedRes = JSON.parse(response);
 
@@ -234,12 +266,11 @@ form.addEventListener('submit', async (e) => {
     deleteCurrentReply();
     scrollToBottom('chatMessagesContainer');
 
-    const role = formData.get('role');
     if (role) {
       // todo: should be replaced for prod
       payload.role = role;
       localStorage.setItem('role', role + '');
-      document.querySelector('#selectRole').remove();
+      document.querySelector('#selectRole')?.remove();
 
       if (role === 'vendor') {
         document.querySelectorAll('.block-msg').forEach((msg) => {
@@ -247,6 +278,45 @@ form.addEventListener('submit', async (e) => {
         });
       }
     }
+  }
+}
+
+socket.on('like_message', (data) => {
+  const parsed = JSON.parse(data);
+  const counterEl =
+    document.querySelector(`.chat-msg[data-id="${parsed.messageId}"] 
+  .chat-msg__like .msg-like__counter`);
+  counterEl.innerHTML = parsed.count;
+  counterEl.dataset.count = parsed.count;
+});
+
+document.getElementById('chatMessages').addEventListener('click', (e) => {
+  const likeContainer = e.target.closest('.chat-msg__like');
+
+  if (likeContainer) {
+    likeContainer.classList.toggle('active');
+
+    const userId = localStorage.getItem('chatUserId');
+
+    if (!userId) {
+      return;
+    }
+
+    const likedByMe = likeContainer.dataset.likedByMe === 'true';
+    likeContainer.dataset.likedByMe = (!likedByMe).toString();
+    const messageId = +likeContainer.closest('.chat-msg').dataset.id;
+
+    const counterEl = likeContainer.querySelector('.msg-like__counter');
+    const count = +counterEl.dataset.count + (likedByMe ? -1 : 1);
+    counterEl.innerHTML = count;
+    counterEl.dataset.count = count;
+
+    socket.emit('like_message', {
+      userId,
+      chatId,
+      messageId,
+      action: likedByMe ? 'delete' : 'add',
+    });
   }
 });
 
@@ -314,7 +384,6 @@ document.getElementById('chatMessages').addEventListener('click', (e) => {
 
 socket.on('block_message', (data) => {
   const parsed = JSON.parse(data);
-  console.log(parsed);
   document.querySelector(
     `.chat-msg[data-id="${parsed.id}"] .chat-msg__content`,
   ).innerText = parsed.content;
@@ -343,7 +412,6 @@ const intersectionObserver = new IntersectionObserver(async (entries) => {
   const lastMsg = lastMsgContainer?.querySelector('.chat-msg');
 
   if (lastMsg?.dataset?.id) {
-    console.log(lastMsg?.dataset?.id);
     await fetchAndRenderMessages(chatId, true, {
       before: +lastMsg.dataset.id,
     });
@@ -353,8 +421,61 @@ const intersectionObserver = new IntersectionObserver(async (entries) => {
 });
 intersectionObserver.observe(messagesEnd);
 
-// helpers
+// helper
 function scrollToBottom(id) {
   const element = document.getElementById(id);
   element.scrollTo(0, element.scrollHeight);
 }
+
+function animateHearts() {
+  const heartsParent = document.querySelector('.chat__send_like');
+  heartsParent.classList.add('animate');
+  setTimeout(() => {
+    heartsParent.classList.remove('animate');
+  }, 1000);
+}
+
+document.querySelector('#sendLikeBtn')?.addEventListener('click', () => {
+  const userId = localStorage.getItem('chatUserId');
+
+  socket.emit('send_like', {
+    userId,
+    chatId,
+  });
+  animateHearts();
+});
+
+socket.on('send_like', (data) => {
+  const parsed = JSON.parse(data);
+  animateHearts();
+});
+
+document
+  .querySelector('#stickersContainer')
+  .addEventListener('click', async (e) => {
+    const sticker = e.target.closest('.sticker');
+    const formData = new FormData(document.getElementById('chatForm'));
+    let role;
+    // todo: should be reworked
+    if (formData.get('role')) {
+      role = formData.get('role');
+    }
+
+    if (sticker) {
+      await sendMessage({
+        type: 'sticker',
+        content: sticker.src,
+        role,
+      });
+    }
+  });
+
+document.querySelector('#stickersBtn').addEventListener('click', () => {
+  document.querySelector('#stickersContainer').classList.toggle('hide');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.stickers-btn')) {
+    document.querySelector('#stickersContainer').classList.add('hide');
+  }
+});

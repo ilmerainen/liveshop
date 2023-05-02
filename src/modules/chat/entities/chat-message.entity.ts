@@ -5,11 +5,13 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Chat } from './chat.entity';
 import { ChatUser } from './chat-user.entity';
+import { MsgLike } from './msg-like.entity';
+import { MessageType } from '../types';
 
 @Entity()
 export class ChatMessage {
@@ -33,6 +35,13 @@ export class ChatMessage {
   })
   replyTo?: number;
 
+  @Column({
+    type: 'enum',
+    enum: MessageType,
+    default: MessageType.text,
+  })
+  type: MessageType;
+
   @CreateDateColumn()
   createdAt: string;
 
@@ -49,6 +58,9 @@ export class ChatMessage {
     name: 'replyTo',
   })
   reply?: ChatMessage;
+
+  @OneToMany(() => MsgLike, (like) => like.message)
+  likes?: MsgLike[];
 
   // #endregion
 }

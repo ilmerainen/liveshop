@@ -4,9 +4,8 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  MaxLength,
 } from 'class-validator';
-import { ChatUserRole } from '../types';
+import { ChatUserRole, MessageType } from '../types';
 
 export class ChatMessageDto {
   @IsNotEmpty()
@@ -15,8 +14,11 @@ export class ChatMessageDto {
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
   content: string;
+
+  @IsNotEmpty()
+  @IsEnum(MessageType)
+  type: MessageType = MessageType.text;
 
   @IsNotEmpty()
   @IsOptional()

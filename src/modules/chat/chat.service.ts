@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, MoreThan, Repository } from 'typeorm';
+import { In, LessThan, MoreThan, Repository } from 'typeorm';
 import { Socket } from 'socket.io';
 import { parse } from 'cookie';
 import { ChatMessage } from './entities/chat-message.entity';
@@ -9,6 +9,8 @@ import { WsException } from '@nestjs/websockets';
 import { ChatUser } from './entities/chat-user.entity';
 import { ICursorPaginationOptions } from '../../utils/types/pagination-options';
 import { Chat } from './entities/chat.entity';
+import { MsgLike } from './entities/msg-like.entity';
+import { MessageWithLikes } from './types';
 
 @Injectable()
 export class ChatService {
@@ -19,6 +21,8 @@ export class ChatService {
     private readonly chatUserRepo: Repository<ChatUser>,
     @InjectRepository(Chat)
     private readonly chatRepo: Repository<Chat>,
+    @InjectRepository(MsgLike)
+    private readonly msgLikeRepo: Repository<MsgLike>,
     private readonly userService: UserService,
   ) {}
 
@@ -60,12 +64,14 @@ export class ChatService {
   }
 
   async getAllMessages(
-    criteria: { chatId: string },
+    payload: { chatId: string; userId?: string },
     pagination?: ICursorPaginationOptions,
-  ) {
+  ): Promise<MessageWithLikes[]> {
     const qb = await this.chatMessagesRepo
       .createQueryBuilder('msg')
-      .where(criteria)
+      .where({
+        chatId: payload.chatId,
+      })
       .leftJoinAndSelect('msg.user', 'user')
       .leftJoinAndSelect('msg.reply', 'reply')
       .leftJoinAndSelect('reply.user', 'replyUser');
@@ -86,19 +92,65 @@ export class ChatService {
       }).take(pagination?.count || this.GET_ALL_MESSAGES_LIMIT);
     }
 
-    const result = await qb.getMany();
-    return result;
+    const messages = await qb.getMany();
+    const likesQb = await this.msgLikeRepo
+      .createQueryBuilder('msgLike')
+      .select(['"messageId"', 'count("messageId") as count'])
+      .where({
+        messageId: In(messages.map(({ id }) => id)),
+      })
+      .groupBy('"messageId"');
+
+    if (payload.userId) {
+      likesQb.addSelect(`(SELECT COUNT(*) FROM msg_like WHERE "messageId" 
+        = "msgLike"."messageId" AND "userId" = '${payload.userId}') > 0 AS "likedByMe"`);
+    }
+
+    const likes: {
+      messageId: number;
+      count: number;
+      likedByMe: boolean;
+    }[] = await likesQb.getRawMany();
+
+    const likesByMsgMap: Record<
+      string,
+      {
+        count: number;
+        likedByMe: boolean;
+      }
+    > = {};
+
+    for (const { messageId, count, likedByMe } of likes) {
+      likesByMsgMap[messageId] = { count, likedByMe: likedByMe || false };
+    }
+
+    return messages.map((msg) => ({
+      ...msg,
+      likesMeta: {
+        count: likesByMsgMap[msg.id]?.count || 0,
+        likedByMe: likesByMsgMap[msg.id]?.likedByMe || false,
+      },
+    }));
   }
 
   async createMessage(
-    data: Pick<ChatMessage, 'content' | 'chatId' | 'userId' | 'replyTo'>,
-  ) {
+    data: Pick<
+      ChatMessage,
+      'content' | 'chatId' | 'userId' | 'replyTo' | 'type'
+    >,
+  ): Promise<MessageWithLikes> {
     const msg = await this.chatMessagesRepo.save(data);
     const found = await this.chatMessagesRepo.findOne({
       where: { id: msg.id },
       relations: ['user', 'reply', 'reply.user'],
     });
-    return found;
+    return {
+      ...found,
+      likesMeta: {
+        likedByMe: false,
+        count: 0,
+      },
+    };
   }
 
   async createUser(data: Pick<ChatUser, 'name' | 'role'>) {
@@ -119,5 +171,38 @@ export class ChatService {
   ): Promise<boolean> {
     const { affected } = await this.chatMessagesRepo.update(criteria, data);
     return affected > 0;
+  }
+
+  /*
+    Returns count of likes for specific msg
+    @returns {number}
+   */
+  async likeMessage({
+    messageId,
+    userId,
+    action = 'add',
+  }: Pick<MsgLike, 'messageId' | 'userId'> & {
+    action?: 'add' | 'delete';
+  }): Promise<number> {
+    if (action === 'add') {
+      await this.msgLikeRepo
+        .createQueryBuilder('msgLike')
+        .insert()
+        .values({ messageId, userId })
+        .orIgnore()
+        .execute();
+    }
+
+    if (action === 'delete') {
+      await this.msgLikeRepo.delete({
+        messageId,
+        userId,
+      });
+    }
+
+    const count = await this.msgLikeRepo.countBy({
+      messageId,
+    });
+    return count;
   }
 }

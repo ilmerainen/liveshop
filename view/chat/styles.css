@@ -56,13 +56,20 @@ p {
   overflow: scroll;
 }
 
+.popup__live {
+  position: relative;
+}
+
 .popup__live video {
-  width: inherit;
+  width: 100%;
+  object-fit: cover;
 }
 
 .chat__messages__container {
   flex: 1;
   overflow: scroll;
+  position: relative;
+  z-index: 1;
 }
 
 .chat__messages {
@@ -76,6 +83,22 @@ p {
   background: rgba(0, 0, 0, 0.05);
   border-radius: 7px;
   position: relative;
+}
+
+.chat-msg__like {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  transform: translateY(-50%);
+  color: #e01407;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.chat-msg__like.active i {
+  color: #e01407;
+  font-weight: 900;
+  font-style: normal;
 }
 
 .chat-msg__content {
@@ -202,8 +225,8 @@ p {
   width: 1.4rem;
   height: 1.4rem;
   position: absolute;
-  top: 25%;
-  right: 3%;
+  top: 10%;
+  right: 10%;
   cursor: pointer;
 }
 
@@ -216,7 +239,7 @@ p {
 }
 
 .reply-on-msg {
-  margin-top: .3rem;
+  margin-top: 0.3rem;
 }
 
 .chat-msg__reply_cur {
@@ -225,6 +248,126 @@ p {
 
 .reply-to-user {
   font-family: 'Roboto Medium', sans-serif;
+}
+
+.chat__form-send_like {
+  padding: 0.5rem;
+  font-size: 2rem;
+}
+
+.chat__form-send_like i {
+  color: #e01407;
+  width: 100%;
+  height: auto;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.chat__form-send_like i:active {
+  color: #e01407;
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* #region Send Like */
+
+.chat__send_like {
+  position: absolute;
+  bottom: 0;
+  right: 2rem;
+  width: 2rem;
+  height: 3rem;
+  padding: 0.5rem;
+}
+
+.chat__send_like i {
+  position: absolute;
+  font-size: 2rem;
+}
+
+.chat__send_like i {
+  position: absolute;
+  display: inline-block;
+  opacity: 0;
+}
+
+.chat__send_like.animate i:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.chat__send_like.animate i:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+/* #endregion */
+
+@keyframes sendLike {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-5rem);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10rem);
+    opacity: 0;
+  }
+}
+
+.chat__send_like.animate i {
+  animation: sendLike 1s ease-out forwards;
+  animation-play-state: running;
+  color: #e01407;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.msg-like__counter {
+  text-align: center;
+}
+
+.stickers-icon {
+  width: 2.8rem;
+  height: auto;
+  padding: 0.5rem;
+}
+
+.stickers-icon:hover {
+  color: #757575;
+}
+
+.stickers-icon:active {
+  color: #3b3b3b;
+}
+
+.stickers-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 1rem;
+  margin: 0 auto;
+  height: 10rem;
+  overflow: scroll;
+  position: sticky;
+  bottom: 0;
+  background: white;
+  box-shadow: 0 0 9px 2px rgb(0 0 0 / 18%);
+  box-sizing: border-box;
+}
+
+.stickers-container .sticker {
+  width: calc(20% - 1rem);
+  height: auto;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.stickers-container img:last-child {
+  margin-right: 0;
 }
 
 /* Styles for devices with a width of 768px or less */
@@ -260,12 +403,17 @@ p {
     -webkit-mask-image: linear-gradient(to top, black 60%, transparent 100%);
     mask-image: linear-gradient(to top, black 60%, transparent 100%);
     position: absolute;
-    bottom: 65px;
-    height: 40vh;
+    bottom: 3rem;
+    height: inherit;
     padding-left: 10px;
   }
 
-  .chat__messages__container > div {
+  .chat.popup__item {
+    position: relative;
+    width: 100%;
+  }
+
+  .chat__messages__container > .chat__messages {
     display: flex;
     flex-direction: column;
   }
@@ -276,6 +424,8 @@ p {
     bottom: 0;
     width: 100%;
     display: flex;
+    background: #1a1a1a;
+    border-top: 2px solid rgba(255, 255, 255, 0.6);
   }
 
   .chat-msg {
@@ -285,6 +435,7 @@ p {
     background: rgb(0 0 0 / 39%);
     color: #fff;
     border-radius: 4px;
+    min-height: 3rem;
   }
 
   .popup {
@@ -299,7 +450,6 @@ p {
 
   .chat__form input {
     border: none;
-    border-top: 2px solid rgba(255, 255, 255, 0.6);
     background: #1a1a1a;
     color: #fff;
   }
@@ -336,5 +486,35 @@ p {
 
   .block-msg {
     display: none;
+  }
+
+  .chat__form-send_like i {
+    color: #fff;
+  }
+
+  .chat__messages__container {
+    width: 100%;
+  }
+
+  .chat__messages {
+    width: 50%;
+  }
+
+  .stickers-container {
+    height: 50vh;
+    flex-direction: unset;
+  }
+
+  .popup__live video {
+    min-width: 100%;
+    height: 100vh;
+  }
+
+  .stickers-icon {
+    color: #fff;
+  }
+
+  .stickers-icon:active {
+    color: #c0c0c0;
   }
 }
