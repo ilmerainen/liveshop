@@ -26,7 +26,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       },
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'view/chat'),
+      rootPath: join(__dirname, '..', 'view/chat/dist'),
       // serveRoot: 'static',
       // renderPath: 'static'
     }),
