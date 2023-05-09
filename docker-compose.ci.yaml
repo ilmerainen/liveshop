@@ -16,6 +16,7 @@ services:
       POSTGRES_DB: ${DATABASE_NAME}
 
   api:
+    container_name: livechat_api
     build:
       context: .
       dockerfile: ci.Dockerfile

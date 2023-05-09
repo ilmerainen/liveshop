@@ -65,6 +65,5 @@ jobs:
           key: ${{ secrets.DIGITALOCEAN_SSH_KEY }}
           envs: DATABASE_TYPE,DATABASE_HOST,DATABASE_PORT,DATABASE_USERNAME,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_SYNCHRONIZE,DATABASE_MAX_CONNECTIONS,DATABASE_SSL_ENABLED,DATABASE_REJECT_UNAUTHORIZED,NODE_ENV,APP_PORT,APP_NAME,API_PREFIX,APP_FALLBACK_LANGUAGE,APP_HEADER_LANGUAGE,FRONTEND_DOMAIN,BACKEND_DOMAIN
           script: |
-            docker-compose -f /root/livechat/docker-compose.ci.yaml -p livechat-api down
-            docker-compose -f /root/livechat/docker-compose.ci.yaml -p livechat-api build --no-cache --force-rm --compress --parallel && \
-            docker-compose -f /root/livechat/docker-compose.ci.yaml up -d --remove-orphans
+            docker-compose -f /root/livechat/docker-compose.ci.yaml -p chat-api down --rmi all --remove-orphans && \
+            docker-compose -f /root/livechat/docker-compose.ci.yaml -p chat-api up -d --build
