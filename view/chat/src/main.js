@@ -1,7 +1,7 @@
 import './styles.css';
 import { io } from 'socket.io-client';
 
-const socket = io('localhost:3001/chat');
+const socket = io('chat.liveshopping.gr/chat');
 
 const path = window.location.pathname;
 const chatId = path.substring(path.lastIndexOf('/') + 1);
