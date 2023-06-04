@@ -18,6 +18,7 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'dist'),
   },
+  watch: true,
   devServer: {
     static: path.resolve(__dirname, 'src/assets'),
     compress: true,

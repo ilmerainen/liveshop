@@ -1,1 +1,181 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1"/><meta http-equiv="X-UA-Compatible" content="ie=edge"/><link href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css" rel="stylesheet"/><link rel="stylesheet" href="assets/fontawesome-free-6.4.0-web/css/all.css"/><title>Live chat</title><link href="main.css" rel="stylesheet"></head><body><div class="website-layout" id="root"><div class="chat-container"><div class="popup"><div class="chat popup__item"><div class="chat__messages__container" id="chatMessagesContainer"><div class="chat__messages__end" id="chatMessagesEnd"></div><div class="chat__messages" id="chatMessages"></div></div><div class="chat-msg__reply chat-msg__reply_cur hide" id="curReply"><div class="reply-icon"><img src="assets/reply.svg"/></div><div class="reply-content"><div class="reply-to-user">Jane Doe</div><div class="reply-on-msg">Hi, what do you think about it?</div></div><div class="reply-cancel" id="cancelReply"><img src="assets/cancel.svg"/></div></div><form class="chat__form" id="chatForm"><div class="chat__form-stickers stickers-container hide" id="stickersContainer"><img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/001-peach.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/002-aubergine.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/003-Splash.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/004-lemon.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/005-ghost.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/006-happy.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/007-kiss.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/008-shock.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/011-heart eyes.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/009-thinking.svg"/> <img class="sticker" src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/010-tongue.svg"/></div><input name="name" placeholder="Name" autofocus/> <input name="msg" placeholder="Say something"/> <select name="role" id="selectRole"><option value="user" selected="selected">User</option><option value="vendor">Vendor</option></select><div class="chat__form-stickers-btn stickers-btn"> <?xml version="1.0" encoding="utf-8"?> <svg id="stickersBtn" class="stickers-icon" version="1.1" fill="currentColor" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="122.88px" height="121.135px" viewBox="0 0 122.88 121.135" enable-background="new 0 0 122.88 121.135" xml:space="preserve"><g><path d="M74.401,65.787h41.427c1.943,0,3.707,0.791,4.982,2.068c1.276,1.275,2.069,3.039,2.069,4.982v41.246 c0,1.941-0.793,3.707-2.069,4.98c-1.275,1.277-3.039,2.07-4.982,2.07H74.401c-1.942,0-3.706-0.793-4.982-2.07 c-1.275-1.273-2.068-3.039-2.068-4.98V72.838c0-1.943,0.793-3.707,2.068-4.982C70.695,66.578,72.459,65.787,74.401,65.787 L74.401,65.787z M7.052,0h41.426c1.942,0,3.707,0.792,4.983,2.069s2.068,3.04,2.068,4.983v41.245c0,1.943-0.792,3.707-2.068,4.982 c-1.276,1.276-3.041,2.069-4.983,2.069H7.052c-1.934,0-3.692-0.793-4.969-2.069l-0.007-0.006l-0.007,0.006 C0.792,52.003,0,50.239,0,48.296V7.052c0-1.943,0.792-3.707,2.069-4.983C2.162,1.976,2.26,1.888,2.359,1.807 C3.607,0.685,5.255,0,7.052,0L7.052,0z M48.131,7.397H7.397V47.95h40.733V7.397L48.131,7.397z M74.401,0h41.427 c1.943,0,3.707,0.792,4.982,2.069c1.276,1.276,2.069,3.04,2.069,4.983v41.245c0,1.943-0.793,3.707-2.069,4.982 c-1.275,1.276-3.039,2.069-4.982,2.069H74.401c-1.942,0-3.706-0.793-4.982-2.069c-1.275-1.275-2.068-3.04-2.068-4.982V7.052 c0-1.943,0.793-3.707,2.068-4.983C70.695,0.792,72.459,0,74.401,0L74.401,0z M115.482,7.397H74.748V47.95h40.734V7.397 L115.482,7.397z M7.052,65.787h41.426c1.942,0,3.707,0.791,4.983,2.068c1.276,1.275,2.068,3.039,2.068,4.982v41.246 c0,1.941-0.792,3.707-2.068,4.98c-1.276,1.277-3.041,2.07-4.983,2.07H7.052c-1.934,0-3.692-0.793-4.969-2.07l-0.007-0.006 l-0.007,0.006C0.792,117.791,0,116.025,0,114.084V72.838c0-1.943,0.792-3.707,2.069-4.982c0.093-0.094,0.191-0.182,0.291-0.264 C3.607,66.471,5.255,65.787,7.052,65.787L7.052,65.787z M48.131,73.184H7.397v40.553h40.733V73.184L48.131,73.184z M115.482,73.184 H74.748v40.553h40.734V73.184L115.482,73.184z"/></g></svg></div><div class="chat__form-send_like"><i id="sendLikeBtn" class="far fa-light fa-heart"></i></div><input class="chat__form-btn" type="submit" value="Send"/></form></div><div class="popup__live popup__item"><video src="./assets/video-medium.mp4" autoplay loop></video><div class="chat__send_like"><i class="far fa-light fa-heart"></i> <i class="far fa-light fa-heart"></i> <i class="far fa-light fa-heart"></i> <i class="far fa-light fa-heart"></i></div></div><div class="popup__products popup__item"></div></div></div></div><script defer="defer" src="main.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="assets/fontawesome-free-6.4.0-web/css/all.css"
+    />
+
+    <link rel="stylesheet" href="./styles_new.css" />
+    <title>Live chat</title>
+  </head>
+  <body>
+    <div class="website-layout" id="root">
+      <div class="chat-container">
+        <div class="popup">
+          <div class="chat popup__item">
+            <div class="chat__messages__container" id="chatMessagesContainer">
+              <div class="chat__messages__end" id="chatMessagesEnd"></div>
+              <div class="chat__messages" id="chatMessages">
+                <!--              <div class="chat-msg-container">-->
+                <!--                <div class="chat-msg__reply">-->
+                <!--                  <div class="reply-icon">-->
+                <!--                    <img src="assets/reply.svg" />-->
+                <!--                  </div>-->
+                <!--                  <div class="reply-content">-->
+                <!--                    <div class="reply-to-user">Jane Doe</div>-->
+                <!--                    <div class="reply-on-msg">-->
+                <!--                      Hi, what do you think about it?-->
+                <!--                    </div>-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--                <div class="chat-msg chat-msg_vendor" data-role="vendor">-->
+                <!--                  <div class="chat-msg__user">John</div>-->
+                <!--                  <div class="chat-msg__content">-->
+                <!--                    Retaining its fashion authority and the very best of its-->
+                <!--                    heritage, while celebrating iconic styles such as the Jamie-->
+                <!--                    and Joni jean, and embracing the new-->
+                <!--                  </div>-->
+                <!--                </div>-->
+                <!--              </div>-->
+              </div>
+            </div>
+
+            <form class="chat__form" id="chatForm">
+              <div
+                class="chat__form-stickers stickers-container hide"
+                id="stickersContainer"
+              >
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/001-peach.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/002-aubergine.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/003-Splash.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/004-lemon.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/005-ghost.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/006-happy.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/007-kiss.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/008-shock.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/011-heart eyes.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/009-thinking.svg"
+                />
+                <img
+                  class="sticker"
+                  src="https://liveshopping.fra1.cdn.digitaloceanspaces.com/stickers/010-tongue.svg"
+                />
+              </div>
+              <div
+                class="chat-msg__reply chat-msg__reply_cur hide"
+                id="curReply"
+              >
+                <div class="reply-content">
+                  <div class="reply-to-user">
+                    <div class="reply-icon">
+                      <img src="assets/reply.svg" />
+                    </div>
+
+                    <div>Jane Doe</div>
+                  </div>
+                  <div class="reply-on-msg">Hi,what do you think about it?</div>
+                </div>
+                <div class="reply-cancel" id="cancelReply">
+                  <img src="assets/cancel.svg" />
+                </div>
+              </div>
+              <div id="login-data" class="chat__form-login">
+                <input type="text" name="name" placeholder="Name" autofocus />
+                <select name="role" id="selectRole">
+                  <option value="user" selected>User</option>
+                  <option value="vendor">Vendor</option>
+                </select>
+              </div>
+              <div class="chat__form-input_container">
+                <input type="text" name="msg" placeholder="Say something" />
+                <div class="chat__form-stickers-btn stickers-btn">
+                  <i
+                    id="stickersBtn"
+                    class="fa-regular fa-face-smile fa-xl"
+                  ></i>
+                  <!-- <?xml version="1.0" encoding="utf-8"?>
+                  <svg
+                    id="stickersBtn"
+                    class="stickers-icon"
+                    version="1.1"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    x="0px"
+                    y="0px"
+                    width="122.88px"
+                    height="121.135px"
+                    viewBox="0 0 122.88 121.135"
+                    enable-background="new 0 0 122.88 121.135"
+                    xml:space="preserve"
+                  >
+                    <g>
+                      <path
+                        d="M74.401,65.787h41.427c1.943,0,3.707,0.791,4.982,2.068c1.276,1.275,2.069,3.039,2.069,4.982v41.246 c0,1.941-0.793,3.707-2.069,4.98c-1.275,1.277-3.039,2.07-4.982,2.07H74.401c-1.942,0-3.706-0.793-4.982-2.07 c-1.275-1.273-2.068-3.039-2.068-4.98V72.838c0-1.943,0.793-3.707,2.068-4.982C70.695,66.578,72.459,65.787,74.401,65.787 L74.401,65.787z M7.052,0h41.426c1.942,0,3.707,0.792,4.983,2.069s2.068,3.04,2.068,4.983v41.245c0,1.943-0.792,3.707-2.068,4.982 c-1.276,1.276-3.041,2.069-4.983,2.069H7.052c-1.934,0-3.692-0.793-4.969-2.069l-0.007-0.006l-0.007,0.006 C0.792,52.003,0,50.239,0,48.296V7.052c0-1.943,0.792-3.707,2.069-4.983C2.162,1.976,2.26,1.888,2.359,1.807 C3.607,0.685,5.255,0,7.052,0L7.052,0z M48.131,7.397H7.397V47.95h40.733V7.397L48.131,7.397z M74.401,0h41.427 c1.943,0,3.707,0.792,4.982,2.069c1.276,1.276,2.069,3.04,2.069,4.983v41.245c0,1.943-0.793,3.707-2.069,4.982 c-1.275,1.276-3.039,2.069-4.982,2.069H74.401c-1.942,0-3.706-0.793-4.982-2.069c-1.275-1.275-2.068-3.04-2.068-4.982V7.052 c0-1.943,0.793-3.707,2.068-4.983C70.695,0.792,72.459,0,74.401,0L74.401,0z M115.482,7.397H74.748V47.95h40.734V7.397 L115.482,7.397z M7.052,65.787h41.426c1.942,0,3.707,0.791,4.983,2.068c1.276,1.275,2.068,3.039,2.068,4.982v41.246 c0,1.941-0.792,3.707-2.068,4.98c-1.276,1.277-3.041,2.07-4.983,2.07H7.052c-1.934,0-3.692-0.793-4.969-2.07l-0.007-0.006 l-0.007,0.006C0.792,117.791,0,116.025,0,114.084V72.838c0-1.943,0.792-3.707,2.069-4.982c0.093-0.094,0.191-0.182,0.291-0.264 C3.607,66.471,5.255,65.787,7.052,65.787L7.052,65.787z M48.131,73.184H7.397v40.553h40.733V73.184L48.131,73.184z M115.482,73.184 H74.748v40.553h40.734V73.184L115.482,73.184z"
+                      />
+                    </g>
+                  </svg> -->
+                </div>
+              </div>
+
+              <div class="chat__form-buttons-container">
+                <button id="sendLikeBtn" class="chat__form-send_like">
+                  <i class="far fa-light fa-heart"></i>
+                </button>
+
+                <button class="chat__form-btn" type="submit">
+                  <i class="fa-solid fa-lg fa-paper-plane"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="popup__live popup__item">
+            <video src="./assets/video-medium.mp4" autoplay loop></video>
+            <div class="chat__send_like"></div>
+          </div>
+          <div class="popup__products popup__item"></div>
+        </div>
+      </div>
+    </div>
+  <script defer src="main.js"></script></body>
+</html>
