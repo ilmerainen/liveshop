@@ -56,7 +56,7 @@ p {
 }
 
 .chat > div {
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 .popup__live {
@@ -74,6 +74,7 @@ p {
   overflow: scroll;
   position: relative;
   z-index: 1;
+  overflow-x: hidden;
 }
 
 .chat__messages {
@@ -146,7 +147,7 @@ p {
   align-items: center;
   position: relative;
   width: 100%;
-  padding-top: 5px;
+  padding-top: 10px;
 }
 
 .chat__form div {
@@ -157,7 +158,7 @@ p {
   bottom: 3rem;
   width: 100%;
   background: rgb(237, 237, 237);
-  padding: 10px 0px;
+  padding: 15px 0px;
   gap: 10px;
   z-index: 5;
 }
@@ -301,8 +302,8 @@ p {
   width: 20px;
   height: 20px;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 5px;
+  right: 8px;
   opacity: 0.4;
   cursor: pointer;
 }
@@ -409,9 +410,7 @@ p {
   font-weight: 900;
   font-style: normal;
 }
-.chat__form-login {
-  background: rgba(0, 0, 0, 0.7);
-}
+
 /* #endregion */
 
 .msg-like__counter {
@@ -448,7 +447,9 @@ p {
   background: rgb(38 38 38 / 92%);
   box-shadow: 0 0 9px 2px rgb(0 0 0 / 18%);
   box-sizing: border-box;
-  gap: 5px;
+  gap: 10px 0px;
+  max-height: 40vh;
+  overflow: scroll;
   z-index: 2;
   position: absolute;
   top: 0;
@@ -457,6 +458,7 @@ p {
 
 .stickers-container .sticker {
   width: 35px;
+  width: calc(100% / 7);
   height: 35px;
   cursor: pointer;
   user-select: none;
@@ -573,12 +575,19 @@ p {
   }
   .chat__form-buttons-container {
     gap: 0;
+    flex-direction: row-reverse;
   }
   .chat__form-btn {
     flex: 1;
     background-color: transparent;
   }
-
+  .chat__form-login {
+    background: rgba(0, 0, 0, 1);
+  }
+  .chat__form-login select {
+    background: #1a1a1a;
+    color: white;
+  }
   .popup__live {
     width: 100%;
   }

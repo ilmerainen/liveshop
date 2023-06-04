@@ -363,6 +363,7 @@ socket.on('like_message', (data) => {
   const counterEl =
     document.querySelector(`.chat-msg[data-id="${parsed.messageId}"] 
   .chat-msg__like .msg-like__counter`);
+  console.log(parsed);
   counterEl.innerHTML = parsed.count;
   counterEl.dataset.count = parsed.count;
 });
